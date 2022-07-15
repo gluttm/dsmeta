@@ -16,7 +16,12 @@ const SalesCard = () => {
   const [sales, setSales] = useState<Sale[]>([])
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/api/v1/sales`)
+    const dMin = minDate.toISOString().slice(0, 10)
+    const dMax = maxDate.toISOString().slice(0, 10)
+    axios.get(`${BASE_URL}/api/v1/sales`,
+      {
+        params: { minDate: dMin, maxDate: dMax }
+      })
       .then((resp) => {
         setSales(resp.data.content)
       })
@@ -61,7 +66,7 @@ const SalesCard = () => {
           <tbody>
             {sales.map((sale: Sale, i) => {
               return (<tr key={i}>
-                <td className="show992">#{sale.id}</td>
+                <td className="show992">{sale.id}</td>
                 <td className="show576">{new Date(sale.date).toLocaleDateString()}</td>
                 <td>{sale.sellerName}</td>
                 <td className="show992">{sale.visited}</td>
